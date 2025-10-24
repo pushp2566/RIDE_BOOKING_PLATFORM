@@ -51,11 +51,24 @@ module.exports.login = async (req, res) => {
 module.exports.logout = async (req, res, next) => {
     const token = req.cookies.token || req.headers.authorization?.split(' ')[ 1 ];
 
-    await BlacklistToken.create({ token });
+    if (!token) {
+        return res.status(400).json({ message: 'No token provided' });
+    }
 
-    res.clearCookie('token');
-
-    res.status(200).json({ message: 'Logout successfully' });
+    try {
+        // Use findOneAndUpdate with upsert to avoid duplicate key errors
+        await BlacklistToken.findOneAndUpdate(
+            { token }, 
+            { token }, 
+            { upsert: true, new: true }
+        );
+        
+        res.clearCookie('token');
+        res.status(200).json({ message: 'Logout successfully' });
+    } catch (error) {
+        console.error('Logout error:', error);
+        res.status(500).json({ message: 'Logout failed' });
+    }
 };
 
 module.exports.getProfile = async (req, res) => {

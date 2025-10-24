@@ -65,10 +65,17 @@ module.exports.logout=async (req,res)=>{
         if (!token) {
             return res.status(400).json({ message: 'No token provided' });
         }
-        const blacklistedToken = new blacklistModel({ token });
-        await blacklistedToken.save();
+        
+        // Use findOneAndUpdate with upsert to avoid duplicate key errors
+        await blacklistModel.findOneAndUpdate(
+            { token }, 
+            { token }, 
+            { upsert: true, new: true }
+        );
+        
         res.status(200).json({ message: 'Logged out successfully' });
     } catch (error) {
+        console.error('User logout error:', error);
         res.status(500).json({ error: 'Internal server error' });
     }
 };  
