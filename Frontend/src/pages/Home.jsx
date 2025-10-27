@@ -65,41 +65,35 @@ const Home = () => {
 
     const handlePickupChange = async (e) => {
         setPickup(e.target.value)
-        // try {
-        //     const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/maps/get-suggestions`, {
-        //         params: { input: e.target.value },
-        //         headers: {
-        //             Authorization: `Bearer ${localStorage.getItem('token')}`
-        //         }
+        try {
+            const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/maps/get-suggestions`, {
+                params: { input: e.target.value },
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`
+                }
 
-        //     })
-             setPickupSuggestions([
-      "Location 1",
-      "Location 2",
-      "Location 3"
-    ])
-        // } catch {
-        //     // handle error
-        // }
+            })
+            setPickupSuggestions(response.data)
+  
+        } catch {
+            // handle error
+        }
     }
 
     const handleDestinationChange = async (e) => {
         setDestination(e.target.value)
-        // try {
-        //     const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/maps/get-suggestions`, {
-        //         params: { input: e.target.value },
-        //         headers: {
-        //             Authorization: `Bearer ${localStorage.getItem('token')}`
-        //         }
-        //     })
-           setDestinationSuggestions([
-      "Location a",
-      "Location b",
-      "Location c"
-    ])
-        // } catch {
-        //     // handle error
-        // }
+        try {
+            const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/maps/get-suggestions`, {
+                params: { input: e.target.value },
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`
+                }
+            })
+            setDestinationSuggestions(response.data)
+  
+        } catch {
+            // handle error
+        }
     }
 
     const submitHandler = (e) => {
@@ -182,30 +176,30 @@ const Home = () => {
         setVehiclePanel(true)
         setPanelOpen(false)
 
-        // const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/rides/get-fare`, {
-        //     params: { pickup, destination },
-        //     headers: {
-        //         Authorization: `Bearer ${localStorage.getItem('token')}`
-        //     }
-        // })
+        const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/rides/get-fare`, {
+            params: { pickup, destination },
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem('token')}`
+            }
+        })
 
 
-        // setFare(response.data)
-        setFare({ amount: 250, currency: 'USD', distance: '5 km', duration: '15 mins' })
+        setFare(response.data)
+        //setFare({ amount: 250, currency: 'USD', distance: '5 km', duration: '15 mins' })
 
 
     }
 
     async function createRide() {
-        // const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/rides/create`, {
-        //     pickup,
-        //     destination,
-        //     vehicleType
-        // }, {
-        //     headers: {
-        //         Authorization: `Bearer ${localStorage.getItem('token')}`
-        //     }
-        // })
+        const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/rides/create`, {
+            pickup,
+            destination,
+            vehicleType
+        }, {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem('token')}`
+            }
+        })
 
 
     }
